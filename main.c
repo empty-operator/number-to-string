@@ -8,7 +8,7 @@
 
 void GenerateNumbers(int[]);
 void PrintNumbers(int, ...);
-char * NumberToWord(const int[], char *);
+char * NumberToWord(int, char *);
 
 char *units[] = {"", "один", "два", "три", "чотири", "п\'ять", "шість", "сім", "вісім", "дев\'ять"};
 char *dozens[] = {"", "десять ", "двадцять ", "тридцять ", "сорок ", "п\'ятдесят ", "шістдесят ", "сімдесят ", "вісімдесят ",
@@ -35,21 +35,17 @@ void GenerateNumbers(int array[]) {
 }
 
 void PrintNumbers(int element, ...) {
-    int *pEl = &element, index[INDEX];
+    int *pEl = &element;
     char number[INDEX * 100];
     printf("Вивід даних:\n\tЧисло\t\tСловесний запис\n");
-    for (int i = 0; i < NUMS; ++i, pEl++) {
-        int copy = *pEl;
-        for (int j = 0; j < INDEX; ++j, copy /= 10)
-            index[j] = copy % 10;
-        printf("| %5d    |    %-40s |\n", *pEl, NumberToWord(index, number));
-    }
+    for (int i = 0; i < NUMS; ++i, pEl++)
+        printf("| %5d    |    %-40s |\n", *pEl, NumberToWord(*pEl, number));
 }
 
-char * NumberToWord(const int array[], char *pStr) {
-    strcpy(pStr, hundreds[array[2]]);
-    if (array[1] == 1)
-        return strcat(pStr, twenties[array[0]]);
-    strcat(pStr, dozens[array[1]]);
-    return strcat(pStr, units[array[0]]);
+char * NumberToWord(int number, char *pStr) {
+    strcpy(pStr, hundreds[number / 100]);
+    if (number / 10 % 10 == 1)
+        return strcat(pStr, twenties[number % 10]);
+    strcat(pStr, dozens[number / 10 % 10]);
+    return strcat(pStr, units[number % 10]);
 }
